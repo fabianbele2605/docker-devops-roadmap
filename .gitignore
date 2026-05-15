@@ -1,3 +1,4 @@
 *.tar.gz
 go/go*/
 **/api-go/api
+**/api-go/api-go
