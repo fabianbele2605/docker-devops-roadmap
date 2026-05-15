@@ -12,8 +12,8 @@ Go · Rust · Docker · Docker Compose · PostgreSQL · Redis · Traefik · Prom
 |------|-------|--------|
 | 1 | Docker basics — Go API, images, containers | ✅ |
 | 2 | Professional Dockerfiles — multi-stage builds, scratch image (987MB → 8MB) | ✅ |
-| 3 | Docker Compose — Go API + PostgreSQL, networks, healthchecks | 🔄 |
-| 4 | Databases & Redis — volumes, backups, caching, migrations | ⏳ |
+| 3 | Docker Compose — Go API + PostgreSQL, networks, healthchecks, volumes, CRUD | ✅ |
+| 4 | Databases & Redis — Redis cache, cache invalidation, cache-aside pattern | ✅ |
 | 5 | Microservices — distributed architecture, internal APIs | ⏳ |
 | 6 | Reverse proxy — Traefik, SSL, load balancing | ⏳ |
 | 7 | Observability — Prometheus, metrics, exporters | ⏳ |

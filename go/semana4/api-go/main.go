@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
+	"github.com/redis/go-redis/v9"
 )
 
 type User struct {
@@ -23,6 +26,12 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
+	opt, err := redis.ParseURL(os.Getenv("REDIS_URL"))
+	if err != nil {
+		log.Fatal("Error parseando REDIS_URL:", err)
+	}
+	rdb := redis.NewClient(opt)
+
 	createTableSQL := `
 	CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
@@ -34,6 +43,11 @@ func main() {
 		log.Fatal("DB no responde:", err)
 	}
 	log.Println("DB conectada")
+
+	if err := rdb.Ping(context.Background()).Err(); err != nil {
+		log.Fatal("Redis no responde:", err)
+	}
+	log.Println("Redis conectado")
 
 	_, err = conn.Exec(context.Background(), createTableSQL)
 
@@ -62,10 +76,17 @@ func main() {
 			return
 		}
 
+		rdb.Del(context.Background(), "users")
+
 		c.JSON(http.StatusCreated, user)
 	})
 
 	r.GET("/users", func(c *gin.Context) {
+		cached, err := rdb.Get(context.Background(), "users").Result()
+		if err == nil {
+			c.Data(http.StatusOK, "application/json", []byte(cached))
+			return
+		}
 		query := "SELECT id, name, email FROM users"
 		rows, err := conn.Query(context.Background(), query)
 		if err != nil {
@@ -90,6 +111,9 @@ func main() {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error durante la lectura de la fila"})
 			return
 		}
+
+		data, _ := json.Marshal(users)
+		rdb.Set(context.Background(), "users", data, 30*time.Second)
 
 		c.JSON(http.StatusOK, users)
 	})

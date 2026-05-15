@@ -17,6 +17,13 @@ services:
     networks:
       - noah_network
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - noah_network
+
   api:
     build:
       context: ./api-go
@@ -24,9 +31,12 @@ services:
       - "8082:8080"
     environment:
       DATABASE_URL: postgresql://noah:noah123@db:5432/noah_db
+      REDIS_URL: redis://redis:6379
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     networks:
       - noah_network
 
