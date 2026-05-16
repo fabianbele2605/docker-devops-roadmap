@@ -1,1 +1,0 @@
-/home/fbeleno/fabian/Estudio/docker-devops-roadmap/services/semana5/auth-service/target/debug/auth-service: /home/fbeleno/fabian/Estudio/docker-devops-roadmap/services/semana5/auth-service/src/main.rs
