@@ -3,3 +3,4 @@ go/go*/
 **/api-go/api
 **/api-go/api-go
 **/target/
+.env

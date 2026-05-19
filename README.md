@@ -20,7 +20,7 @@ Go · Rust · Docker · Docker Compose · PostgreSQL · Redis · Traefik · Prom
 | 8 | Grafana & Logs — dashboards, centralized logging | ✅ |
 | 9 | CI/CD — GitHub Actions, automated testing | ✅ |
 | 10 | Automated deployment — SSH deploy, Docker Registry | ⏳ |
-| 11 | Security — secrets, non-root users, hardening | ⏳ |
+| 11 | Security — secrets, non-root users, hardening | ✅ |
 | 12 | Final project — complete SaaS microservices platform | ⏳ |
 
 ## Structure
