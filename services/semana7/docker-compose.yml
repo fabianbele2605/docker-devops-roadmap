@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: noah
+      POSTGRES_PASSWORD: noah123
+      POSTGRES_DB: noah_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U noah -d noah_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - noah_network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - noah_network
+
+  rust_api:
+    build:
+      context: ./auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      DATABASE_URL: postgresql://noah:noah123@db:5432/noah_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - noah_network
+
+  go_api:
+    build:
+      context: ./user-service
+    ports:
+      - "8082:8080"
+    environment:
+      DATABASE_URL: postgresql://noah:noah123@db:5432/noah_db
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - noah_network
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - noah_network
+
+volumes:
+  postgres_data:
+
+networks: 
+  noah_network:

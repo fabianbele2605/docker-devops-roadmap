@@ -16,7 +16,7 @@ Go · Rust · Docker · Docker Compose · PostgreSQL · Redis · Traefik · Prom
 | 4 | Databases & Redis — Redis cache, cache invalidation, cache-aside pattern | ✅ |
 | 5 | Microservices — user-service (Go) + auth-service (Rust/Axum), inter-service network | ✅ |
 | 6 | Reverse proxy — Traefik + socket-proxy, labels, path routing | ✅ ⚠️ Docker Desktop socket limitation on Windows, works on Linux VPS |
-| 7 | Observability — Prometheus, metrics, exporters | ⏳ |
+| 7 | Observability — Prometheus, metrics, exporters | ✅ |
 | 8 | Grafana & Logs — dashboards, centralized logging | ⏳ |
 | 9 | CI/CD — GitHub Actions, automated testing | ⏳ |
 | 10 | Automated deployment — SSH deploy, Docker Registry | ⏳ |
